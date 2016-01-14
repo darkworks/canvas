@@ -1,16 +1,26 @@
 <?php
 
-error_reporting(E_ALL);
+define('SYSPATH', realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR);
 
-$site_path = realpath(dirname(__FILE__));
-define ('SYSPATH', $site_path);
-define ('APPPATH', SYSPATH . '/application');
+session_start();
 
-require_once SYSPATH . '/system/core.php';
+$config = require_once(__DIR__ . '/config.php');
 
-$registry->router = new Router($registry);
-$registry->router->setPath(APPPATH . '/controller');
-$registry->template = new Template($registry);
-$registry->router->loader();
+require_once __DIR__ . '/bootstrap.php';
 
-?>
+Database::init($config);
+
+// var_dump(User::find('test'));
+// die();
+
+$router = new Router($config['routes']);
+
+list($controllerName, $action) = $router->resolve();
+
+$controller = new $controllerName();
+$controller->init($config);
+
+$content = $controller->runAction($action);
+
+$responce = new Responce(200, $content);
+$responce->returnPage();
