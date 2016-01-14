@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript">
+    window.onload = function() {
+        var box1 = document.getElementById('box1');
+        box1.addEventListener('dragstart', function(e) { console.log('Dragging #box1'); });
+        box1.addEventListener('dragend', function(e) { console.log('Dragging ended'); });
+        var box2 = document.getElementById('box2');
+        box2.addEventListener('dragenter', function(e) { console.log('Entered into #box2'); });
+        box2.addEventListener('dragleave', function(e) { console.log('Leaving #box2'); });
+    }
+</script>
+</head>
+<body>
+<div draggable="true" id="box1" style="width: 100px; height: 100px; background-color: navy;"> </div>
+<div id="box2" style="width: 100px; height: 100px; background-color: green;"> </div>
+</body>
+</html>
