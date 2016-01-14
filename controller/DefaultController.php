@@ -11,7 +11,6 @@ class DefaultController
 
     public function runAction($action)
     {
-
         ob_start();
         $this->$action();
 

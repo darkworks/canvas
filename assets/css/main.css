@@ -1,0 +1,33 @@
+#canvasBlock {
+    position: relative;
+}
+
+#canvasTools {
+    /*position: absolute;
+    top: 0px;
+    right: -20px;*/
+    float: left;
+}
+
+#canvasTools > button {
+    margin-bottom: 5px;
+}
+
+canvas {
+    height: 300px;
+    width: 700px;
+    border: 2px solid grey;
+}
+
+#gallery {
+
+}
+
+.picture {
+    float: left;
+    width: 150px;
+    height: 150px;
+    border: 1px solid grey;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
