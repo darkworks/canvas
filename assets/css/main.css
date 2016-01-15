@@ -14,9 +14,8 @@
 }
 
 canvas {
-    height: 300px;
-    width: 700px;
-    border: 2px solid grey;
+    border: 3px solid #C7C7C7;
+    cursor: crosshair;
 }
 
 #gallery {
@@ -27,7 +26,14 @@ canvas {
     float: left;
     width: 150px;
     height: 150px;
-    border: 1px solid grey;
+    border: 3px solid #E8E8E8;
     margin-right: 10px;
     margin-bottom: 10px;
+    position: relative;
+}
+
+.picture span {
+    position: absolute;
+    top: 2px;
+    left: 2px;
 }

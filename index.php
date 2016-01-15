@@ -10,7 +10,7 @@ require_once __DIR__ . '/bootstrap.php';
 
 Database::init($config);
 
-// var_dump(User::find('test'));
+// var_dump(UserModel::find('test'));
 // die();
 
 $router = new Router($config['routes']);

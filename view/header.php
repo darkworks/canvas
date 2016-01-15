@@ -14,7 +14,7 @@
   </head>
 
   <body>
-    <div class="container">
-        <div class="header clearfix">
+    <section class="container">
+        <nav class="header clearfix">
             <h3 class="text-muted">Canvas</h3>
-        </div>
+        </nav>

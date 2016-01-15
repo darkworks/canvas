@@ -11,6 +11,8 @@ return [
     'routes' => [
         '#\/user/(\d+)#' => ['UserController', 'show'],
         '#\/user#' => ['UserController', 'index'],
+        '#\/save#' => ['UserController', 'save'],
+        '#\/access#' => ['UserController', 'access'],
         '#\/#' => ['DefaultController', 'index']
     ]
 ];

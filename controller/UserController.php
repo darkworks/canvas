@@ -6,17 +6,16 @@ class UserController extends DefaultController
 
     public function index()
     {
-        var_dump($_POST);
+        // var_dump($_POST);
         $errors = [];
 
         // Auth
         if(!empty($_POST) && isset($_POST['username']) && isset($_POST['password'])) {
 
             $username = $_POST['username'];
-            $password = md5($_POST['password']);
+            $password = System::crypt($_POST['password']);
 
-            $userInfo = User::find($username);
-            $sail = '132456';
+            $userInfo = UserModel::find($username);
 
             if(!$userInfo){
                 $errors[] = 'User not found';
@@ -30,9 +29,10 @@ class UserController extends DefaultController
                 return $this->template->render('userIndex', ['errors' => $errors]);
             }
 
+            $_SESSION['userid'] = $userInfo['id'];
             $_SESSION['username'] = $userInfo['username'];
-            header('Location: /');
 
+            header('Location: /');
         }
 
         return $this->template->render('userIndex');
