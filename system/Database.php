@@ -2,8 +2,17 @@
 
 class Database
 {
+    /**
+     * Database instance
+     * @var null
+     */
     private static $instance = NULL;
 
+    /**
+     * Connect to database
+     * @param  array $config main config
+     * @return object         return database instance
+     */
     public static function init($config)
     {
         if (!self::$instance) {
@@ -18,6 +27,10 @@ class Database
         return self::$instance;
     }
 
+    /**
+     * Get database instance
+     * @return object return database instance
+     */
     public static function getInstance() {
         return self::$instance;
     }

@@ -3,9 +3,6 @@
 }
 
 #canvasTools {
-    /*position: absolute;
-    top: 0px;
-    right: -20px;*/
     float: left;
 }
 
@@ -36,4 +33,8 @@ canvas {
     position: absolute;
     top: 2px;
     left: 2px;
+}
+
+#pagination {
+    width: 200px;
 }

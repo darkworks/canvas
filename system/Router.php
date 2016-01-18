@@ -2,17 +2,30 @@
 
 class Router
 {
+    /**
+     * Array of site routers
+     * @var array
+     */
     private $routes = [];
 
+    /**
+     * Constructor routers
+     * @param array $routes site routers
+     * @return void
+     */
     function __construct($routes)
     {
         $this->routes = $routes;
     }
 
+    /**
+    * Comparison a url with an array of routers
+    * @return array return array controller and action
+    */
     public function resolve()
     {
         $uri = $_SERVER['REQUEST_URI'];
-        // $uri = '/user';
+        // $uri = '/';
 
         foreach ($this->routes as $rule => $action) {
 

@@ -2,6 +2,13 @@
 
 class Template
 {
+
+    /**
+     * Render templatet
+     * @param  string $name   template name
+     * @param  array  $params paramt for template
+     * @return void
+     */
     public static function render($name, $params = [])
     {
         $templatePath = SYSPATH . 'view/' . $name . '.php';

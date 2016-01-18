@@ -1,8 +1,19 @@
+/**
+ * Ajax requests to server
+ */
 var http = {
+    /**
+     * Wrapper request of ajax
+     * @param  {string}   type     type of requests
+     * @param  {string}   url      url of request
+     * @param  {Function} callback callback function
+     * @param  {string}   body     body of request
+     * @return {void}
+     */
     send: function(type, url, callback, body) {
         var xhr = new XMLHttpRequest();
         xhr.open(type, url, true);
-        if(type == 'POST') {
+        if (type == 'POST') {
             xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         }
         xhr.addEventListener("readystatechange", function() {
@@ -13,11 +24,22 @@ var http = {
 
         xhr.send(body);
     },
+
+    /**
+     * Send post request
+     * @param  {string}   url      url of request
+     * @param  {Function} callback callback function
+     * @param  {string}   body     body of request
+     * @return {void}
+     */
     post: function(url, callback, body) {
         this.send('POST', url, callback, body);
     }
 };
 
+/**
+ * Canvas editor
+ */
 var paint = (function() {
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext("2d");
@@ -29,14 +51,14 @@ var paint = (function() {
     var oldY;
     var drawing = false;
 
+    /**
+     * Drawing canvas lines
+     * @param  {object} e mouse objects
+     * @return {void}
+     */
     var draw = function(e) {
-        // var position = document.getElementById('position');
 
-        // position.innerText = 'X: ' + e.clientX + ' Y: ' + e.clientY
-        // + '   OffsetX: ' + e.offsetX + ' OffsetY: ' + e.offsetY
-        // + '   OffsetLeft: ' + canvas.offsetLeft + ' OffsetTop: ' + canvas.offsetTop;
-
-        if(!oldX || !oldY) {
+        if (!oldX || !oldY) {
             oldX = e.offsetX;
             oldY = e.offsetY;
         }
@@ -50,20 +72,31 @@ var paint = (function() {
         oldY = e.offsetY;
     }
 
+    /**
+     * Saving canvas image to server
+     * @return {void}
+     */
     var save = function() {
         var password = prompt("Please enter your password");
 
         var image = canvas.toDataURL("image/png");
         var body = "image=" + image + "&password=" + password;
 
+        /**
+         * Callback
+         * @param  {mixed} body     body of responce
+         * @param  {ojects} headers responce headers
+         * @param  {integer} status responce status
+         * @return {boolean}        return in error
+         */
         var mycallback = function(body, headers, status) {
 
-            if(!body) {
+            if (!body) {
                 alert('Unknown error!');
                 return false;
             }
 
-            if(body.error) {
+            if (body.error) {
                 alert('Error save Image!');
                 return false;
             }
@@ -71,7 +104,7 @@ var paint = (function() {
             var gallery = document.getElementById('gallery');
             var div = document.createElement('div');
             div.setAttribute('class', 'picture');
-            var editButton = '<span data-image="image_' + body.id + '" class="btn btn-default btn-sm glyphicon glyphicon-pencil" title="Edit"></span>';
+            var editButton = '<span data-image="image_' + body.id + '" class="edit btn btn-default btn-sm glyphicon glyphicon-pencil" title="Edit"></span>';
             div.innerHTML = editButton + '<img id="image_' + body.id + '" src="' + body.image + '" width="150" height="150" />';
             gallery.insertBefore(div, gallery.firstChild);
 
@@ -81,43 +114,64 @@ var paint = (function() {
         http.post('/save', mycallback, body);
     }
 
+    /**
+     * Editing canvas image
+     * @return {[type]} [description]
+     */
     var edit = function() {
         clear(false);
 
         var password = prompt("Please enter password for editing");
 
-        if(!password) {
+        if (!password) {
             return false;
         }
 
         var id = this.getAttribute("data-image");
         var body = "imageid=" + id.replace('image_', '') + "&password=" + password;
 
+        /**
+         * Callback
+         * @param  {mixed} body     body of responce
+         * @param  {ojects} headers responce headers
+         * @param  {integer} status responce status
+         * @return {boolean}        return in error
+         */
         var mycallback = function(body, headers, status) {
 
-            if(!body) {
+            if (!body) {
                 alert('Unknown error!');
                 return false;
             }
 
-            if(body.error) {
+            if (body.error) {
                 alert('Password wrong!');
                 return false;
             }
 
-            var img = document.getElementById(id);
+            if (!body.image) {
+                alert('Unknown error!');
+                return false;
+            }
+
+            var img = new Image();
+            img.src = body.image;
             context.drawImage(img, 0, 0);
         }
 
         http.post('/access', mycallback, body);
     }
 
+    /**
+     * Clear window canvas
+     * @return {void}
+     */
     var clear = function() {
         context.clearRect(0, 0, canvas.width, canvas.height);
     }
 
     canvas.addEventListener("mousemove", function(e) {
-        if(drawing) {
+        if (drawing) {
             draw(e);
         }
     });
@@ -142,10 +196,70 @@ var paint = (function() {
 
     saveButton.addEventListener("click", save);
 
-    var addEventToEditButtons = (function() {
+    /**
+     * Handlers put in the edit button
+     * @return {void}
+     */
+    var addEventToEditButtons = function() {
         for (var i = 0; i < editButton.length; i++) {
             editButton[i].addEventListener("click", edit, false);
         }
-    })();
+    };
 
+    addEventToEditButtons();
+
+})();
+
+
+/**
+ * Load images from Ajax
+ * @return {void}
+ */
+var pagination = (function() {
+
+    var getImages = function() {
+        var currentPage = parseInt(this.getAttribute("data-page"), 10);
+
+        var body = "page=" + (currentPage + 1);
+
+        /**
+         * Callback
+         * @param  {mixed} body     body of responce
+         * @param  {ojects} headers responce headers
+         * @param  {integer} status responce status
+         * @return {boolean}        return in error
+         */
+        var mycallback = function(body, headers, status) {
+            if (!body) {
+                alert('Unknown error!');
+                return false;
+            }
+
+            if (!body.images || !body.currentpage) {
+                alert('Unknown error!');
+                return false;
+            }
+
+            if(body.images.length == 0 || !body.button){
+                moreButton.style.display == 'none';
+            }
+
+            for (var i = 0; i < body.images.length; i++) {
+                var gallery = document.getElementById('gallery');
+                var div = document.createElement('div');
+                div.setAttribute('class', 'picture');
+                var editButton = '<span data-image="image_' + body.images[i].id + '" class="edit btn btn-default btn-sm glyphicon glyphicon-pencil" title="Edit"></span>';
+                div.innerHTML = editButton + '<img id="image_' + body.images[i].id + '" src="' + body.path + body.images[i].name+ '" width="150" height="150" />';
+                gallery.appendChild(div);
+            };
+
+            moreButton.setAttribute('data-page', body.currentpage);
+
+        }
+
+        http.post('/getimages', mycallback, body);
+    };
+
+    var moreButton = document.getElementById('more');
+    moreButton.addEventListener("click", getImages, false);
 })();

@@ -2,9 +2,22 @@
 
 class DefaultModel
 {
+    /**
+     * Table name in the Database
+     * @var string
+     */
     protected static $table;
+    /**
+     * Last insert ID
+     * @var integer
+     */
     public static $lastInsertId;
 
+    /**
+     * Adding data in Database
+     * @param array $data array params
+     * @return boolean status execution
+     */
     public static function add($data)
     {
         $db = Database::getInstance();

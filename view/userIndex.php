@@ -12,7 +12,7 @@ include "header.php";
         <input type="password" class="form-control" id="password" name="password" placeholder="Password">
     </div>
     <ul style="color: red;">
-    <?php if(isset($errors)) : ?>
+    <?php if (isset($errors)) : ?>
         <?php foreach ($errors as $error): ?>
             <li><?php echo $error; ?></li>
         <?php endforeach; ?>

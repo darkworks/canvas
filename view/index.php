@@ -2,7 +2,7 @@
 include "header.php";
 ?>
 
-<?php if(!isset($_SESSION['username'])): ?>
+<?php if (!isset($_SESSION['username'])): ?>
 
     <header class="jumbotron">
         <h3>Canvas picture</h3>
@@ -41,7 +41,7 @@ include "header.php";
         <div class="row">
             <div class="col-lg-12 col-md-6">
                 <div id="gallery">
-                    <?php if(!empty($gallery)): ?>
+                    <?php if (!empty($gallery)): ?>
                         <?php foreach ($gallery as $image): ?>
                             <div class="picture"><span data-image="image_<?=$image['id']; ?>" class="edit btn btn-default btn-sm glyphicon glyphicon-pencil" title="Edit"></span><img id="image_<?=$image['id']; ?>" src="/upload/<?=$image['name']; ?>" width="150" height="150" /></div>
                         <?php endforeach; ?>
@@ -51,6 +51,11 @@ include "header.php";
                 </div>
             </div>
         </div>
+        <?php if (isset($pagination)): ?>
+        <div class="row text-center">
+            <button id="more" class="btn btn-primary" data-page="1"><span class="glyphicon glyphicon-chevron-down"></span> More</button>
+        </div>
+        <?php endif; ?>
     </section>
 
 <?php endif; ?>

@@ -8,6 +8,7 @@ $config = require_once(__DIR__ . '/config.php');
 
 require_once __DIR__ . '/bootstrap.php';
 
+System::init($config);
 Database::init($config);
 
 // var_dump(UserModel::find('test'));

@@ -2,15 +2,23 @@
 
 class ImageModel extends DefaultModel
 {
+    /**
+     * Table name in the Database
+     * @var string
+     */
     protected static $table = 'images';
 
-    public static function findAll($count = null)
+    /**
+     * Get array images
+     * @param  integer $count count records
+     * @return array          array images
+     */
+    public static function findAll($start = 0, $count = 10)
     {
         $result = [];
-        $limit = (!$count) ? '' : ' LIMIT '.$count;
 
         $db = Database::getInstance();
-        $stmt = $db->prepare('SELECT id, name FROM ' . static::$table . $limit . ' ORDER BY ID DESC');
+        $stmt = $db->prepare('SELECT id, name FROM ' . static::$table . ' ORDER BY ID DESC LIMIT ' . $start . ', '. $count);
         $stmt->execute();
 
         foreach ($stmt as $row)
@@ -21,12 +29,27 @@ class ImageModel extends DefaultModel
         return $result;
     }
 
+    /**
+     * Check access for canvas edit
+     * @param  integer $imageId image id
+     * @return array
+     */
     public static function checkAccess($imageId)
     {
         $db = Database::getInstance();
-        $stmt = $db->prepare('SELECT password FROM ' . static::$table . ' WHERE id = ?');
+        $stmt = $db->prepare('SELECT name, password FROM ' . static::$table . ' WHERE id = ?');
         $stmt->execute(array($imageId));
 
         return $stmt->fetch();
+    }
+
+
+    public static function countImages()
+    {
+        $db = Database::getInstance();
+        $stmt = $db->prepare('SELECT Count(*) FROM ' . static::$table);
+        $stmt->execute();
+
+        return $stmt->fetchColumn();
     }
 }
