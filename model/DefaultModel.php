@@ -27,10 +27,10 @@ class DefaultModel
 
         foreach ($data as $key => $val) {
             $values[] = ':' . $key;
-            $fields[] = '`' . $key . '`';
+            $fields[] = $key;
         }
 
-        $stmt = $db->prepare("INSERT INTO `". static::$table . "` (" . implode(', ', $fields) . ") VALUES (" . implode(', ', $values) . ")");
+        $stmt = $db->prepare("INSERT INTO `". static::$table . "` (`" . implode('`, `', $fields) . "`) VALUES (" . implode(', ', $values) . ")");
         $status = $stmt->execute($data);
 
         static::$lastInsertId = $db->lastInsertId();

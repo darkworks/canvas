@@ -22,8 +22,7 @@ class ImageModel extends DefaultModel
         $stmt = $db->prepare('SELECT id, name FROM ' . static::$table . ' ORDER BY ID DESC LIMIT ' . $start . ', '. $count);
         $stmt->execute();
 
-        foreach ($stmt as $row)
-        {
+        foreach ($stmt as $row) {
             $result[] = $row;
         }
 

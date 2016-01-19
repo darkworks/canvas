@@ -35,7 +35,13 @@ abstract class DefaultController
     public function runAction($action)
     {
         ob_start();
-        $this->$action();
+
+        try{
+            $this->$action();
+        } catch(Exception $e) {
+            $this->error500();
+            exit();
+        }
 
         return ob_get_clean();
     }
@@ -47,5 +53,14 @@ abstract class DefaultController
     public function error404()
     {
         return $this->template->render('error404');
+    }
+
+    /**
+     * Action Error500
+     * @return string return content
+     */
+    public function error500()
+    {
+        return $this->template->render('error500');
     }
 }
