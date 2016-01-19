@@ -79,6 +79,10 @@ var paint = (function() {
     var save = function() {
         var password = prompt("Please enter your password");
 
+        if (!password) {
+            return false;
+        }
+
         var image = canvas.toDataURL("image/png");
         var body = "image=" + image + "&password=" + password;
 
@@ -261,5 +265,7 @@ var pagination = (function() {
     };
 
     var moreButton = document.getElementById('more');
-    moreButton.addEventListener("click", getImages, false);
+    if (!!moreButton) {
+        moreButton.addEventListener("click", getImages, false);
+    }
 })();

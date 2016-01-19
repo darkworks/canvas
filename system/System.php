@@ -8,6 +8,12 @@ class System
      */
     private static $sail = NULL;
 
+    /**
+     * Which denotes the algorithmic cost that should be used
+     * @var integer
+     */
+    private static $cost = 11;
+
     /*
      * Initialization system
      * @param  array $config main config
@@ -15,6 +21,10 @@ class System
      */
     public static function init($config)
     {
+        if (empty($config)) {
+            throw new Exception('Config data not found');
+        }
+
         self::$sail = $config['sail'];
     }
 
@@ -25,6 +35,15 @@ class System
      */
     public static function crypt($string)
     {
-        return md5($string . self::$sail);
+        if (!self::$sail) {
+            throw new Exception('Sail not found');
+        }
+
+        $options = [
+            'cost' => self::$cost,
+            'salt' => self::$sail
+        ];
+
+        return password_hash($string, PASSWORD_BCRYPT, $options);
     }
 }

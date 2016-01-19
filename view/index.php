@@ -11,7 +11,7 @@ include "header.php";
     </header>
 <?php else: ?>
 
-    <h3>Welcome, <strong><?php echo $_SESSION['username']; ?></strong></h3>
+    <h3>Welcome, <span class="glyphicon glyphicon-user"></span> <strong><?php echo $_SESSION['username']; ?></strong></h3>
 
     <section class="container text-center">
         <div class="row">

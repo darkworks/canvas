@@ -16,7 +16,7 @@ class UserModel
     public static function find($username)
     {
         $db = Database::getInstance();
-        $stmt = $db->prepare('SELECT id, username, password FROM ' . static::$table . ' WHERE username = ?');
+        $stmt = $db->prepare('SELECT id, username, hash FROM ' . static::$table . ' WHERE username = ?');
         $stmt->execute(array($username));
 
         return $stmt->fetch();

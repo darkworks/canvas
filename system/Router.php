@@ -15,6 +15,10 @@ class Router
      */
     function __construct($routes)
     {
+        if (empty($routes)) {
+            throw new Exception('Config routes is empty');
+        }
+
         $this->routes = $routes;
     }
 
@@ -25,16 +29,12 @@ class Router
     public function resolve()
     {
         $uri = $_SERVER['REQUEST_URI'];
-        // $uri = '/';
 
         foreach ($this->routes as $rule => $action) {
 
             $match = preg_match_all($rule, $uri, $matches);
 
-            // var_dump('Match - ' . $match . ' rule - ' . $rule);
-
             if ($match) {
-                // var_dump('Action - ' . print_r($action, true));
                 return $action; // ['UserController', 'index']
             }
         }

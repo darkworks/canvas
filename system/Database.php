@@ -16,12 +16,12 @@ class Database
     public static function init($config)
     {
         if (!self::$instance) {
-            $dsn = "mysql:host={$config['db']['server']};dbname={$config['db']['dbname']}";
+            $dsn = "mysql:host={$config['server']};dbname={$config['dbname']}";
             $opt = array(
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
             );
-            self::$instance = new PDO($dsn, $config['db']['username'], $config['db']['password'], $opt);
+            self::$instance = new PDO($dsn, $config['username'], $config['password'], $opt);
         }
 
         return self::$instance;

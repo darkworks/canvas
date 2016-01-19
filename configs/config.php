@@ -1,7 +1,9 @@
 <?php
 
 return [
-    'sail' => '9SH1Wgez',
+    'system' => [
+        'sail' => 'sLovSQ9DFlNXF6fn6fhStN'
+        ],
     'controller' => [
         'pagination' => [
             'count_items_on_page' => 7
@@ -17,9 +19,9 @@ return [
     'routes' => [
         '#\/user/(\d+)#' => ['UserController', 'show'],
         '#\/user#' => ['UserController', 'index'],
-        '#\/save#' => ['DefaultController', 'save'],
-        '#\/access#' => ['DefaultController', 'access'],
-        '#\/getimages#' => ['DefaultController', 'getimages'],
-        '#^\/$#' => ['DefaultController', 'index']
+        '#\/save#' => ['MainController', 'save'],
+        '#\/access#' => ['MainController', 'access'],
+        '#\/getimages#' => ['MainController', 'getimages'],
+        '#^\/$#' => ['MainController', 'index']
     ]
 ];

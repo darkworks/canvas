@@ -38,7 +38,7 @@ class ImageModel extends DefaultModel
     public static function checkAccess($imageId)
     {
         $db = Database::getInstance();
-        $stmt = $db->prepare('SELECT name, password FROM ' . static::$table . ' WHERE id = ?');
+        $stmt = $db->prepare('SELECT name, hash FROM ' . static::$table . ' WHERE id = ?');
         $stmt->execute(array($imageId));
 
         return $stmt->fetch();

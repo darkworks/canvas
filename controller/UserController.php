@@ -14,14 +14,13 @@ class UserController extends DefaultController
      */
     public function index()
     {
-        // var_dump($_POST);
         $errors = [];
 
         // Auth
         if (!empty($_POST) && isset($_POST['username']) && isset($_POST['password'])) {
 
             $username = $_POST['username'];
-            $password = System::crypt($_POST['password']);
+            $password = $_POST['password'];
 
             $userInfo = UserModel::find($username);
 
@@ -29,7 +28,7 @@ class UserController extends DefaultController
                 $errors[] = 'User not found';
             }
 
-            if ($password != $userInfo['password']) {
+            if (!password_verify($password, $userInfo['hash'])) {
                 $errors[] = 'Username or password are incorrect';
             }
 
