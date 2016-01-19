@@ -13,7 +13,8 @@ if (empty($config)) {
 }
 
 System::init($config['system']);
-Database::init($config['db']);
+DefaultModel::init($config['db']);
+die();
 
 $router = new Router($config['routes']);
 
