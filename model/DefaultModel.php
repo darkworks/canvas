@@ -1,23 +1,40 @@
 <?php
 
-class DefaultModel
+abstract class DefaultModel
 {
     /**
      * Table name in the Database
      * @var string
      */
     protected static $table;
-    /**
-     * Last insert ID
-     * @var integer
-     */
-    public static $lastInsertId;
+    // *
+    //  * Last insert ID
+    //  * @var integer
+    //
+    protected static $db;
 
-    /**
-     * Adding data in Database
-     * @param array $data array params
-     * @return boolean status execution
-     */
+    // public static $lastInsertId;
+    //
+    function __construct ()
+    {
+        static::$db = Database::getInstance();
+    }
+
+    public static function findAll()
+    {
+
+    }
+
+    public static function find()
+    {
+
+    }
+
+    public static function countAll()
+    {
+
+    }
+
     public static function add($data)
     {
         $db = Database::getInstance();
