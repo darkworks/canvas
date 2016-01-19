@@ -125,19 +125,19 @@ class DefaultController
     }
 
     /**
-     * [getImages description]
-     * @return [type] [description]
+     * Action get images
+     * @return void
      */
     public function getimages()
     {
-        // if (isset($_SESSION['userid'])) {
+        if (isset($_SESSION['userid'])) {
             $currentPage = (intval($_POST['page']) <= 1) ? 1 : intval($_POST['page']);
             $allrecords = ImageModel::countImages();
             $count_items_on_page = $this->config['pagination']['count_items_on_page'];
 
             $start = $count_items_on_page * ($currentPage - 1);
 
-            $show = ($allrecords >= $start + $count_items_on_page) ? true : false;
+            $show = ($allrecords >= $start + $count_items_on_page + 1) ? true : false;
 
             $json = [];
             $json['button'] = $show;
@@ -146,7 +146,7 @@ class DefaultController
             $json['images'] = ImageModel::findAll($start, $count_items_on_page);
 
             static::json($json);
-        // }
+        }
     }
 
     /**

@@ -10,7 +10,8 @@ class ImageModel extends DefaultModel
 
     /**
      * Get array images
-     * @param  integer $count count records
+     * @param  integer $start start position (default 0)
+     * @param  integer $count count records (default 10)
      * @return array          array images
      */
     public static function findAll($start = 0, $count = 10)
@@ -43,7 +44,10 @@ class ImageModel extends DefaultModel
         return $stmt->fetch();
     }
 
-
+    /**
+     * Get number of records
+     * @return void
+     */
     public static function countImages()
     {
         $db = Database::getInstance();

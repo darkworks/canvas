@@ -241,7 +241,7 @@ var pagination = (function() {
             }
 
             if(body.images.length == 0 || !body.button){
-                moreButton.style.display == 'none';
+                moreButton.style.display = 'none';
             }
 
             for (var i = 0; i < body.images.length; i++) {

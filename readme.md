@@ -1,1 +1,55 @@
-На папку upload надо выставить права
+Первоначальный логин и пароль test
+
+На папку upload надо выставить права 777 на сервере
+
+Пример конфигурационного файла для nginx
+upstream backend-canvas.local {server unix:/var/run/php5-canvas.local.sock;}
+
+server {
+    listen 80;
+    server_name canvas.local www.canvas.local;
+    root /var/www/canvas.local/www;
+    access_log /var/log/nginx/canvas.local-access.log;
+    error_log /var/log/nginx/canvas.local-error.log;
+    index /index.php;
+    rewrite_log on;
+
+    location / {
+            try_files $uri $uri/ @canvas;
+        }
+
+        location ~ /\. {
+            deny  all;
+    }
+
+    # Protect application and system files from being viewed
+    location ~* ^/(?:controller|model|system)\b.* {
+        rewrite ^(.+)$ /index.php$1 permanent;
+    }
+
+    # FOR PHP FILES
+    location ~* \.php$ {
+        try_files $uri $uri/ @canvas;
+
+        fastcgi_pass backend-canvas.local;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            include fastcgi_params;
+        fastcgi_buffer_size 128k;
+        fastcgi_buffers 4 256k;
+        fastcgi_busy_buffers_size 256k;
+    }
+
+    location @canvas
+    {
+        fastcgi_pass backend-canvas.local;
+            fastcgi_index index.php;
+            include fastcgi_params;
+            fastcgi_param SCRIPT_FILENAME $document_root/index.php;
+    }
+
+    location ~* \.(jpg|jpeg|gif|png|zip|tgz|gz|rar|bz2|doc|xls|exe|pdf|ppt|tar|wav|bmp|rtf|swf|ico|flv|txt|docx|xlsx|js|css|woff)$ {
+        access_log off;
+        expires 8d;
+    }
+}
