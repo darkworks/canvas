@@ -77,14 +77,21 @@ var paint = (function() {
      * @return {void}
      */
     var save = function() {
-        var password = prompt("Please enter your password");
-
-        if (!password) {
-            return false;
-        }
 
         var image = canvas.toDataURL("image/png");
-        var body = "image=" + image + "&password=" + password;
+        var imageId = this.getAttribute("data-imageid");
+
+        if (imageId) {
+            var body = "image=" + image + "&id=" + imageId;
+        } else {
+            var password = prompt("Please enter your password");
+
+            if (!password) {
+                return false;
+            }
+
+            var body = "image=" + image + "&password=" + password;
+        }
 
         /**
          * Callback
@@ -105,9 +112,16 @@ var paint = (function() {
                 return false;
             }
 
+            if (imageId) {
+                var editElement = document.getElementById('image_' + imageId);
+                editElement.setAttribute('src', body.image + '?' + new Date().getTime());
+                return false;
+            }
+
             var gallery = document.getElementById('gallery');
             var div = document.createElement('div');
             div.setAttribute('class', 'picture');
+            div.setAttribute('id', 'picture_' + body.id);
             var editButton = '<span data-image="image_' + body.id + '" class="edit btn btn-default btn-sm glyphicon glyphicon-pencil" title="Edit"></span>';
             div.innerHTML = editButton + '<img id="image_' + body.id + '" src="' + body.image + '" width="150" height="150" />';
             gallery.insertBefore(div, gallery.firstChild);
@@ -161,6 +175,7 @@ var paint = (function() {
             var img = new Image();
             img.src = body.image;
             context.drawImage(img, 0, 0);
+            saveButton.setAttribute('data-imageid', id.replace('image_', ''));
         }
 
         http.post('/access', mycallback, body);
@@ -252,6 +267,7 @@ var pagination = (function() {
                 var gallery = document.getElementById('gallery');
                 var div = document.createElement('div');
                 div.setAttribute('class', 'picture');
+                div.setAttribute('id', 'picture_' + body.images[i].id);
                 var editButton = '<span data-image="image_' + body.images[i].id + '" class="edit btn btn-default btn-sm glyphicon glyphicon-pencil" title="Edit"></span>';
                 div.innerHTML = editButton + '<img id="image_' + body.images[i].id + '" src="' + body.path + body.images[i].name+ '" width="150" height="150" />';
                 gallery.appendChild(div);

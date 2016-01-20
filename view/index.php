@@ -43,7 +43,7 @@ include "header.php";
                 <div id="gallery">
                     <?php if (!empty($gallery)): ?>
                         <?php foreach ($gallery as $image): ?>
-                            <div class="picture"><span data-image="image_<?=$image['id']; ?>" class="edit btn btn-default btn-sm glyphicon glyphicon-pencil" title="Edit"></span><img id="image_<?=$image['id']; ?>" src="/upload/<?=$image['name']; ?>" width="150" height="150" /></div>
+                            <div id="picture_<?=$image->id; ?>" class="picture"><span data-image="image_<?=$image->id; ?>" class="edit btn btn-default btn-sm glyphicon glyphicon-pencil" title="Edit"></span><img id="image_<?=$image->id; ?>" src="/upload/<?=$image->name; ?>" width="150" height="150" /></div>
                         <?php endforeach; ?>
                     <?php else: ?>
                         Images not found

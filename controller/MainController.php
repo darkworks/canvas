@@ -16,11 +16,11 @@ class MainController extends DefaultController
     {
         $count_items_on_page = $this->config['pagination']['count_items_on_page'];
 
-        $allrecords = ImageModel::countImages();
-        $gallery = ImageModel::findAll(0, $count_items_on_page);
+        $allrecords = ImageModel::countAll();
+        $gallery = ImageModel::findPart(0, $count_items_on_page);
 
         $data = [];
-        $data['gallery'] = $gallery;
+        $data['gallery'] = $gallery->attributes;
 
         if ($allrecords > $count_items_on_page) {
             $data['pagination'] = true;
@@ -35,13 +35,28 @@ class MainController extends DefaultController
      */
     public function save()
     {
-        if (isset($_SESSION['userid']) && isset($_POST['image']) && isset($_POST['password'])) {
+        if (isset($_SESSION['userid']) && isset($_POST['image']) && (isset($_POST['password']) || isset($_POST['id']))) {
+
             $uploadDir = 'upload/';
             $path = SYSPATH . $uploadDir;
             $fileName = uniqid() . '.png';
 
             $img = str_replace('data:image/png;base64,', '', $_POST['image']);
             $img = str_replace(' ', '+', $img);
+
+            if (isset($_POST['id'])) {
+                $id = intval($_POST['id']);
+                $image = new ImageModel();
+                $result = $image->find($id);
+                $fileName = $result->name;
+                file_put_contents($path . $fileName, base64_decode($img));
+
+                $json = [];
+                $json['error'] = false;
+                $json['image'] = DIRECTORY_SEPARATOR . $uploadDir . $fileName;
+
+                static::json($json);
+            }
 
             file_put_contents($path . $fileName, base64_decode($img));
 
@@ -50,14 +65,18 @@ class MainController extends DefaultController
             $data['name'] = $fileName;
             $data['hash'] = System::crypt($_POST['password']);
 
-            $sql = ImageModel::add($data);
+            $image = new ImageModel();
+            $image->userid = $_SESSION['userid'];
+            $image->name = $fileName;
+            $image->hash = System::crypt($_POST['password']);
+            $status = $image->save();
 
             $json = [];
-            $json['error'] = (!$sql) ? true : false;
+            $json['error'] = (!$status) ? true : false;
 
-            if ($sql) {
+            if ($status) {
                 $json['image'] = DIRECTORY_SEPARATOR . $uploadDir . $fileName;
-                $json['id'] = ImageModel::$lastInsertId;
+                $json['id'] = ImageModel::getLastInsertId();
             }
 
             static::json($json);
@@ -71,12 +90,12 @@ class MainController extends DefaultController
     public function access()
     {
         if (isset($_SESSION['userid']) && isset($_POST['password']) && isset($_POST['imageid'])) {
-            $imageInfo = ImageModel::checkAccess($_POST['imageid']);
+            $imageInfo = ImageModel::find($_POST['imageid']);
 
             $check = false;
             $password = $_POST['password'];
 
-            if (password_verify($password, $imageInfo['hash'])) {
+            if (password_verify($password, $imageInfo->hash)) {
                 $check = true;
             }
 
@@ -85,7 +104,7 @@ class MainController extends DefaultController
 
             if ($check) {
                 $uploadDir = 'upload/';
-                $path = SYSPATH . $uploadDir . $imageInfo['name'];
+                $path = SYSPATH . $uploadDir . $imageInfo->name;
                 $imageData = file_get_contents($path);
 
                 $json['image'] = 'data:image/png;base64,' . base64_encode($imageData);
@@ -103,7 +122,7 @@ class MainController extends DefaultController
     {
         if (isset($_SESSION['userid'])) {
             $currentPage = (intval($_POST['page']) <= 1) ? 1 : intval($_POST['page']);
-            $allrecords = ImageModel::countImages();
+            $allrecords = ImageModel::countAll();
             $count_items_on_page = $this->config['pagination']['count_items_on_page'];
 
             $start = $count_items_on_page * ($currentPage - 1);
@@ -114,7 +133,8 @@ class MainController extends DefaultController
             $json['button'] = $show;
             $json['path'] = '/upload/';
             $json['currentpage'] = $currentPage;
-            $json['images'] = ImageModel::findAll($start, $count_items_on_page);
+            $result = ImageModel::findPart($start, $count_items_on_page);
+            $json['images'] = $result->attributes;
 
             static::json($json);
         }

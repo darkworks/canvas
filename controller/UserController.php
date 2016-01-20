@@ -22,13 +22,13 @@ class UserController extends DefaultController
             $username = $_POST['username'];
             $password = $_POST['password'];
 
-            $userInfo = UserModel::find($username);
+            $userInfo = UserModel::findByName($username);
 
             if (!$userInfo){
                 $errors[] = 'User not found';
             }
 
-            if (!password_verify($password, $userInfo['hash'])) {
+            if (!password_verify($password, $userInfo->hash)) {
                 $errors[] = 'Username or password are incorrect';
             }
 
@@ -36,8 +36,8 @@ class UserController extends DefaultController
                 return $this->template->render('userIndex', ['errors' => $errors]);
             }
 
-            $_SESSION['userid'] = $userInfo['id'];
-            $_SESSION['username'] = $userInfo['username'];
+            $_SESSION['userid'] = $userInfo->id;
+            $_SESSION['username'] = $userInfo->username;
 
             header('Location: /');
         }

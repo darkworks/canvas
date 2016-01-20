@@ -1,6 +1,6 @@
 <?php
 
-class UserModel
+class UserModel extends DefaultModel
 {
     /**
      * Table name in the Database
@@ -13,12 +13,24 @@ class UserModel
      * @param  string $username username
      * @return array           [description]
      */
-    public static function find($username)
+    // public static function find($username)
+    // {
+    //     $db = Database::getInstance();
+    //     $stmt = $db->prepare('SELECT id, username, hash FROM ' . static::$table . ' WHERE username = ?');
+    //     $stmt->execute(array($username));
+
+    //     return $stmt->fetch();
+    // }
+    //
+
+    public static function findByName($username)
     {
         $db = Database::getInstance();
+
         $stmt = $db->prepare('SELECT id, username, hash FROM ' . static::$table . ' WHERE username = ?');
         $stmt->execute(array($username));
 
-        return $stmt->fetch();
+        return $stmt->fetchObject();
     }
+
 }
