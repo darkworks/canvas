@@ -97,9 +97,9 @@ var paint = (function() {
 
         /**
          * Callback
-         * @param  {mixed} body     body of responce
-         * @param  {ojects} headers responce headers
-         * @param  {integer} status responce status
+         * @param  {mixed} body     body of response
+         * @param  {ojects} headers response headers
+         * @param  {integer} status response status
          * @return {boolean}        return in error
          */
         var mycallback = function(body, headers, status) {
@@ -152,9 +152,9 @@ var paint = (function() {
 
         /**
          * Callback
-         * @param  {mixed} body     body of responce
-         * @param  {ojects} headers responce headers
-         * @param  {integer} status responce status
+         * @param  {mixed} body     body of response
+         * @param  {ojects} headers response headers
+         * @param  {integer} status response status
          * @return {boolean}        return in error
          */
         var mycallback = function(body, headers, status) {
@@ -245,9 +245,9 @@ var pagination = (function() {
 
         /**
          * Callback
-         * @param  {mixed} body     body of responce
-         * @param  {ojects} headers responce headers
-         * @param  {integer} status responce status
+         * @param  {mixed} body     body of response
+         * @param  {ojects} headers response headers
+         * @param  {integer} status response status
          * @return {boolean}        return in error
          */
         var mycallback = function(body, headers, status) {

@@ -24,5 +24,5 @@ $controller->init($config);
 
 $content = $controller->runAction($action);
 
-$responce = new Responce(200, $content);
-$responce->returnPage();
+$response = new Response(200, $content);
+$response->returnPage();

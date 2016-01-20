@@ -2,7 +2,7 @@
 /**
  * Designed for the return of content
  */
-class Responce {
+class Response {
 
     /**
      * Status page
@@ -17,7 +17,7 @@ class Responce {
 	private $content;
 
     /**
-     * Responce constructor
+     * Response constructor
      * @param integer $status  status page
      * @param string $content sait content
      */
