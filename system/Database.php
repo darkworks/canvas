@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Designed for database connection
+ */
+
 class Database
 {
     /**

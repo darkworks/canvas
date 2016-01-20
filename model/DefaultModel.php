@@ -1,37 +1,57 @@
 <?php
-
+/**
+ * Abstract class DefaultModel
+ */
 abstract class DefaultModel
 {
+    /**
+     * Table name in the Database
+     * @var string
+     */
     protected static $table;
-    protected static $lastInsertId;
-    public $attributes = [];
-    // protected $id;
-    protected $isNew;
 
+    /**
+     * Last insert ID
+     * @var integer
+     */
+    protected static $lastInsertId;
+
+    /**
+     * Attributes class
+     * @var array
+     */
+    private $attributes = [];
+
+    /**
+     * Show type query Inse
+     * @var [type]
+     */
+    private $isNew = true;
+
+    /**
+     * Magic method __get
+     * @param  string $name
+     * @return array
+     */
     function __get($name)
     {
-        if (isset($this->attributes[$name])) {
-            return $this->attributes[$name];
-        } else {
-            return null;
-        }
+        return $this->attributes[$name];
     }
 
+    /**
+     * Magic method __set
+     * @param string $name
+     * @param mixed $value
+     */
     function __set($name, $value)
     {
         $this->attributes[$name] = $value;
     }
 
-    public function getAttr()
-    {
-        return $this->attributes;
-    }
-
-    public function isNew($param)
-    {
-        $this->isNew = $param;
-    }
-
+    /**
+     * Save data in Database
+     * @return boolean return status
+     */
     public function save()
     {
         $db = Database::getInstance();
@@ -66,6 +86,11 @@ abstract class DefaultModel
         return $status;
     }
 
+    /**
+     * Find record in Database use ID
+     * @param  [integer] $id id record
+     * @return object     return model
+     */
     public static function find($id)
     {
         $db = Database::getInstance();
@@ -73,20 +98,16 @@ abstract class DefaultModel
         $stmt->execute(array($id));
         $result = $stmt->fetchObject();
 
-        $name = get_called_class();
-        $class = new $name();
+        $model = new self();
+        $model->populate($result);
 
-        if(!empty($result)) {
-            foreach ($result as $key => $value) {
-                $class->$key = $value;
-            }
-
-            $class->isNew(true);
-        }
-
-        return $class;
+        return $model;
     }
 
+    /**
+     * Return count records in table
+     * @return array
+     */
     public static function countAll()
     {
         $db = Database::getInstance();
@@ -96,8 +117,26 @@ abstract class DefaultModel
         return $stmt->fetchColumn();
     }
 
+    /**
+     * Get last insert id
+     * @return [type] [description]
+     */
     public static function getLastInsertId()
     {
         return static::$lastInsertId;
+    }
+
+    /**
+     * Set attributes in model
+     * @param  array  $data
+     * @return void
+     */
+    protected function populate(array $data)
+    {
+        foreach ($data as $key => $value) {
+            $this->$key = $value;
+        }
+
+        $this->isNew = false;
     }
 }

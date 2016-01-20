@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Autoload classes
+ * @param  string $class classs name
+ * @return void
+ */
 function autoloader($class) {
     $find = false;
 

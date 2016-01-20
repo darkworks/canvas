@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Designed to work with templates
+ */
 class Template
 {
 

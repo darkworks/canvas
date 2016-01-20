@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Abstract base controller
+ */
 abstract class DefaultController
 {
     abstract protected function index();
@@ -39,6 +41,12 @@ abstract class DefaultController
         try{
             $this->$action();
         } catch(Exception $e) {
+
+            if($e->getMessage() == 'Not found') {
+                $this->error404();
+                exit();
+            }
+
             $this->error500();
             exit();
         }

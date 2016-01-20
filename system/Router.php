@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Designed to redirect
+ */
 class Router
 {
     /**

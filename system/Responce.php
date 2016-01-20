@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Designed for the return of content
+ */
 class Responce {
 
     /**

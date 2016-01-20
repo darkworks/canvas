@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Designed for internal operations
+ */
 class System
 {
     /**

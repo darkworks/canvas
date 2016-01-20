@@ -9,20 +9,10 @@ class UserModel extends DefaultModel
     protected static $table = 'users';
 
     /**
-     * Find user profile
-     * @param  string $username username
-     * @return array           [description]
+     * Find record use username
+     * @param  [type] $username [description]
+     * @return [type]           [description]
      */
-    // public static function find($username)
-    // {
-    //     $db = Database::getInstance();
-    //     $stmt = $db->prepare('SELECT id, username, hash FROM ' . static::$table . ' WHERE username = ?');
-    //     $stmt->execute(array($username));
-
-    //     return $stmt->fetch();
-    // }
-    //
-
     public static function findByName($username)
     {
         $db = Database::getInstance();

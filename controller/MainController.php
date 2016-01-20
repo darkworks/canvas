@@ -20,7 +20,7 @@ class MainController extends DefaultController
         $gallery = ImageModel::findPart(0, $count_items_on_page);
 
         $data = [];
-        $data['gallery'] = $gallery->attributes;
+        $data['gallery'] = $gallery;
 
         if ($allrecords > $count_items_on_page) {
             $data['pagination'] = true;
@@ -46,10 +46,13 @@ class MainController extends DefaultController
 
             if (isset($_POST['id'])) {
                 $id = intval($_POST['id']);
-                $image = new ImageModel();
-                $result = $image->find($id);
-                $fileName = $result->name;
-                file_put_contents($path . $fileName, base64_decode($img));
+                $image = ImageModel::find($id);
+
+                if (isset($image->name)) {
+                    throw new Exception('Not found');
+                }
+
+                file_put_contents($path . $image->name, base64_decode($img));
 
                 $json = [];
                 $json['error'] = false;
@@ -115,7 +118,7 @@ class MainController extends DefaultController
     }
 
     /**
-     * Action get images
+     * Action get images use Ajax
      * @return void
      */
     public function getimages()
