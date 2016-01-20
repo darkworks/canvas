@@ -38,11 +38,11 @@ abstract class DefaultController
     {
         ob_start();
 
-        try{
+        try {
             $this->$action();
         } catch(Exception $e) {
 
-            if($e->getMessage() == 'Not found') {
+            if ($e->getMessage() == 'Not found') {
                 $this->error404();
                 exit();
             }

@@ -1,3 +1,5 @@
+var addEventToEditButtons;
+
 /**
  * Ajax requests to server
  */
@@ -219,7 +221,7 @@ var paint = (function() {
      * Handlers put in the edit button
      * @return {void}
      */
-    var addEventToEditButtons = function() {
+    addEventToEditButtons = function() {
         for (var i = 0; i < editButton.length; i++) {
             editButton[i].addEventListener("click", edit, false);
         }
@@ -259,7 +261,7 @@ var pagination = (function() {
                 return false;
             }
 
-            if(body.images.length == 0 || !body.button){
+            if (body.images.length == 0 || !body.button) {
                 moreButton.style.display = 'none';
             }
 
@@ -274,7 +276,7 @@ var pagination = (function() {
             };
 
             moreButton.setAttribute('data-page', body.currentpage);
-
+            addEventToEditButtons();
         }
 
         http.post('/getimages', mycallback, body);

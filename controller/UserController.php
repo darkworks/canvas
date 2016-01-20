@@ -24,7 +24,7 @@ class UserController extends DefaultController
 
             $userInfo = UserModel::findByName($username);
 
-            if (!$userInfo){
+            if (!$userInfo) {
                 $errors[] = 'User not found';
             }
 
@@ -32,7 +32,7 @@ class UserController extends DefaultController
                 $errors[] = 'Username or password are incorrect';
             }
 
-            if (!empty($errors)){
+            if (!empty($errors)) {
                 return $this->template->render('userIndex', ['errors' => $errors]);
             }
 
