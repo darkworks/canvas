@@ -48,6 +48,11 @@ abstract class DefaultModel
         $this->attributes[$name] = $value;
     }
 
+    // function __sleep()
+    // {
+    //     return $this->attributes;
+    // }
+
     /**
      * Save data in Database
      * @return boolean return status
@@ -56,7 +61,7 @@ abstract class DefaultModel
     {
         $db = Database::getInstance();
 
-        if (!isset($this->isNew)) {
+        if (isset($this->isNew)) {
             $data = [];
 
             foreach ($this->attributes as $key => $val) {
@@ -96,9 +101,9 @@ abstract class DefaultModel
         $db = Database::getInstance();
         $stmt = $db->prepare('SELECT * FROM `' . static::$table . '` WHERE id = ?');
         $stmt->execute(array($id));
-        $result = $stmt->fetchObject();
+        $result = $stmt->fetch();
 
-        $model = new self();
+        $model = new static();
         $model->populate($result);
 
         return $model;

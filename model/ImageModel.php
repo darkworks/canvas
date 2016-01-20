@@ -23,7 +23,7 @@ class ImageModel extends DefaultModel
 
         $models = [];
         foreach ($result as $item) {
-            $model = new self();
+            $model = new static();
             $model->populate($item);
             $models[] = $model;
         }

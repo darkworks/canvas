@@ -56,22 +56,18 @@ class MainController extends DefaultController
 
                 $json = [];
                 $json['error'] = false;
-                $json['image'] = DIRECTORY_SEPARATOR . $uploadDir . $fileName;
+                $json['image'] = DIRECTORY_SEPARATOR . $uploadDir . $image->name;
 
                 static::json($json);
             }
 
             file_put_contents($path . $fileName, base64_decode($img));
 
-            $data = [];
-            $data['userid'] = $_SESSION['userid'];
-            $data['name'] = $fileName;
-            $data['hash'] = System::crypt($_POST['password']);
-
             $image = new ImageModel();
             $image->userid = $_SESSION['userid'];
             $image->name = $fileName;
             $image->hash = System::crypt($_POST['password']);
+
             $status = $image->save();
 
             $json = [];
@@ -121,7 +117,7 @@ class MainController extends DefaultController
      * Action get images use Ajax
      * @return void
      */
-    public function getimages()
+    public function getImages()
     {
         if (isset($_SESSION['userid'])) {
             $currentPage = (intval($_POST['page']) <= 1) ? 1 : intval($_POST['page']);
@@ -137,7 +133,16 @@ class MainController extends DefaultController
             $json['path'] = '/upload/';
             $json['currentpage'] = $currentPage;
             $result = ImageModel::findPart($start, $count_items_on_page);
-            $json['images'] = $result->attributes;
+
+            $array = [];
+
+            foreach ($result as $key => $value) {
+                $array[$key] = [];
+                $array[$key]['id'] = $value->id;
+                $array[$key]['name'] = $value->name;
+            }
+
+            $json['images'] = $array;
 
             static::json($json);
         }
